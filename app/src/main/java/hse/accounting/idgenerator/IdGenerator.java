@@ -1,18 +1,21 @@
 package hse.accounting.idgenerator;
 
+/**
+ * Синглтон для генерации идентификаторов
+ */
 public class IdGenerator {
     private static final IdGenerator INSTANCE = new IdGenerator();
-    private IdGenerationStrategy strategy;
+    private IIdGenerationStrategy strategy;
 
     private IdGenerator() {
-        this.strategy = new IncrementalIdStrategy();
+        this.strategy = new IncrementalIStrategy();
     }
 
     public static IdGenerator getInstance() {
         return INSTANCE;
     }
 
-    public void setStrategy(IdGenerationStrategy strategy) {
+    public void setStrategy(IIdGenerationStrategy strategy) {
         this.strategy = strategy;
     }
 

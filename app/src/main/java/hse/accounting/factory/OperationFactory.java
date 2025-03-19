@@ -5,6 +5,9 @@ import hse.accounting.idgenerator.IdGenerator;
 
 import java.time.LocalDateTime;
 
+/**
+ * Фабрика для создания операций
+ */
 public class OperationFactory {
     private final IdGenerator idGenerator = IdGenerator.getInstance();
 

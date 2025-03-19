@@ -3,6 +3,9 @@ package hse.accounting.factory;
 import hse.accounting.domain.BankAccount;
 import hse.accounting.idgenerator.IdGenerator;
 
+/**
+ * Фабрика для создания банковских счетов
+ */
 public class BankAccountFactory {
     private final IdGenerator idGenerator = IdGenerator.getInstance();
 

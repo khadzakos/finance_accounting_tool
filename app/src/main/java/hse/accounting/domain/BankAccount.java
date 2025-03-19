@@ -1,10 +1,16 @@
 package hse.accounting.domain;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * BankAccount - класс, описывающий банковский счет.
 */
 public class BankAccount {
+    @JsonProperty("accountId")
     private final Long id;
+    @JsonProperty("accountName")
     private String name;
+    @JsonProperty("balance")
     private double balance;
 
     public BankAccount(Long id, String name, double balance) {
