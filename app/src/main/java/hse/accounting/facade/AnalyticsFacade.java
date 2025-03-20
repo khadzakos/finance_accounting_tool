@@ -12,19 +12,31 @@ import java.util.List;
  * Фасад для работы с аналитикой
  */
 public class AnalyticsFacade {
-    private final InMemoryRepository<Category> categoryRepository;
     private final InMemoryRepository<Operation> operationRepository;
 
-    public AnalyticsFacade(InMemoryRepository<Category> categoryRepository, InMemoryRepository<Operation> operationRepository) {
-        this.categoryRepository = categoryRepository;
+    public AnalyticsFacade(InMemoryRepository<Operation> operationRepository) {
         this.operationRepository = operationRepository;
     }
 
-    public double getDifferenceForPeriod(LocalDateTime start, LocalDateTime end) {
+    public double getAllIncome() {
+        return operationRepository.getList().stream()
+                .filter(operation -> operation.getType() == Operation.Type.INCOME)
+                .mapToDouble(Operation::getAmount)
+                .sum();
+    }
+
+    public double getAllExpense() {
+        return operationRepository.getList().stream()
+                .filter(operation -> operation.getType() == Operation.Type.EXPENSE)
+                .mapToDouble(Operation::getAmount)
+                .sum();
+    }
+
+    public double getAccountDifferenceForPeriod(Long bankAccountId, LocalDateTime start, LocalDateTime end) {
         double income = 0;
         double expense = 0;
-        for (Operation operation : operationRepository.getList().stream().map(pair -> pair.getValue()).toList()) {
-            if (operation.getDateTime().isAfter(start) && operation.getDateTime().isBefore(end)) {
+        for (Operation operation : operationRepository.getList().stream().toList()) {
+            if (operation.getBankAccountId().equals(bankAccountId) && operation.getDateTime().isAfter(start) && operation.getDateTime().isBefore(end)) {
                 if (operation.getType() == Operation.Type.INCOME) {
                     income += operation.getAmount();
                 } else {
@@ -37,7 +49,6 @@ public class AnalyticsFacade {
 
     public List<Operation> getOperationsByCategory(Long categoryId) {
         return operationRepository.getList().stream()
-                .map(Pair::getValue)
                 .filter(operation -> operation.getCategoryId().equals(categoryId))
                 .toList();
     }

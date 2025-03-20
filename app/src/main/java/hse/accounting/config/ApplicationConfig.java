@@ -66,6 +66,6 @@ public class ApplicationConfig {
 
     @Bean
     public AnalyticsFacade analyticsFacade() {
-        return new AnalyticsFacade(categoryRepository(), operationRepository());
+        return new AnalyticsFacade(operationRepository());
     }
 }

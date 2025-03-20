@@ -39,15 +39,14 @@ public class App {
                 case 5 -> UI.viewAllCategories(categoryFacade);
                 case 6 -> UI.viewAllOperations(operationFacade, categoryFacade, bankAccountFacade);
                 case 7 -> UI.recalculateBalance(bankAccountFacade);
-                case 8 -> UI.getAccountDifferenceForPeriod(analyticsFacade, bankAccountFacade);
-                case 9 -> UI.groupOperationsByCategory(analyticsFacade, categoryFacade);
-                case 10 -> UI.editAccount(bankAccountFacade);
-                case 11 -> UI.editCategory(categoryFacade);
-                case 12 -> UI.editOperation(operationFacade, categoryFacade);
-                case 13 -> UI.deleteAccount(bankAccountFacade);
-                case 14 -> UI.deleteCategory(categoryFacade);
-                case 15 -> UI.deleteOperation(operationFacade);
-//                case 16 -> UI.importExport();
+                case 8 -> UI.analitycs(analyticsFacade, categoryFacade, bankAccountFacade);
+                case 9 -> UI.editAccount(bankAccountFacade);
+                case 10 -> UI.editCategory(categoryFacade);
+                case 11 -> UI.editOperation(operationFacade, categoryFacade);
+                case 12 -> UI.deleteAccount(bankAccountFacade);
+                case 13 -> UI.deleteCategory(categoryFacade, operationFacade);
+                case 14 -> UI.deleteOperation(operationFacade);
+//                case 15 -> UI.importExport();
                 case 0 -> {
                     context.close();
                     System.out.println("Выход...");

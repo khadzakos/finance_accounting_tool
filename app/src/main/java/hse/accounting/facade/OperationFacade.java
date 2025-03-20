@@ -51,6 +51,15 @@ public class OperationFacade {
         repository.delete(operation);
     }
 
+    public void deleteOperationsByBankAccount(Long bankAccountId) {
+        List<Operation> operations = repository.getList().stream()
+                .filter(operation -> operation.getBankAccountId().equals(bankAccountId))
+                .toList();
+        for (Operation operation : operations) {
+            repository.delete(operation);
+        }
+    }
+
     public double calculateBalanceForAccount(Long accountId) {
         List<Operation> operations = repository.getList().stream()
                 .filter(operation -> operation.getBankAccountId().equals(accountId))

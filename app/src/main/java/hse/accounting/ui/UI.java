@@ -21,6 +21,8 @@ import hse.accounting.command.EditAccountCommand;
 import hse.accounting.command.EditCategoryCommand;
 import hse.accounting.command.EditOperationCommand;
 import hse.accounting.command.GetAccountDifferenceForPeriodCommand;
+import hse.accounting.command.GetIncomesCommand;
+import hse.accounting.command.GetExpensesCommand;
 import hse.accounting.command.GetOperationsByCategoryCommand;
 import hse.accounting.command.RecalculateBalanceCommand;
 import hse.accounting.command.ViewAllAccountsCommand;
@@ -28,6 +30,7 @@ import hse.accounting.command.ViewAllCategoriesCommand;
 import hse.accounting.command.ViewAllOperationsCommand;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Scanner;
 
 public class UI {
@@ -42,15 +45,14 @@ public class UI {
         System.out.println("5. Показать все категории");
         System.out.println("6. Показать все операции");
         System.out.println("7. Пересчитать баланс счета");
-        System.out.println("8. Получить разницу доходов и расходов по аккаунту за период");
-        System.out.println("9. Группировка операций по категориям");
-        System.out.println("10. Редактировать счёт");
-        System.out.println("11. Редактировать категорию");
-        System.out.println("12. Редактировать операцию");
-        System.out.println("13. Удалить счёт");
-        System.out.println("14. Удалить категорию");
-        System.out.println("15. Удалить операцию");
-        System.out.println("16. Импорт/Экспорт данных");
+         System.out.println("8. Аналитика");
+        System.out.println("9. Редактировать счёт");
+        System.out.println("10. Редактировать категорию");
+        System.out.println("11. Редактировать операцию");
+        System.out.println("12. Удалить счёт");
+        System.out.println("13. Удалить категорию");
+        System.out.println("14. Удалить операцию");
+        System.out.println("15. Импорт/Экспорт данных");
         System.out.println("0. Выход");
         System.out.print("Выберите действие: ");
     }
@@ -58,7 +60,7 @@ public class UI {
     public static void createAccount(BankAccountFacade bankAccountFacade) {
         System.out.print("Введите название счёта: ");
         String name = scanner.nextLine();
-        System.out.print("Введите баланс счёта(Пример: 100.50): ");
+        System.out.print("Введите баланс счёта(Пример: 100): ");
         while (!scanner.hasNextDouble()) {
             System.out.println("Неверный формат баланса");
             scanner.nextLine();
@@ -100,6 +102,10 @@ public class UI {
             System.out.println("Счёт с таким ID не найден");
             return;
         }
+        System.out.printf("""
+                Выбранный счёт:
+                ID: %d, Название: %s, Баланс: %.2f
+                """, accountId, bankAccountFacade.getBankAccount(accountId).getName(), bankAccountFacade.getBankAccount(accountId).getBalance());
 
         System.out.print("Введите ID категории: ");
         while (!scanner.hasNextLong()) {
@@ -112,6 +118,11 @@ public class UI {
             System.out.println("Категория с таким ID не найдена");
             return;
         }
+
+        System.out.printf("""
+                Выбранная категория:
+                ID: %d, Название: %s, Тип: %s
+                """, categoryId, categoryFacade.getCategory(categoryId).getName(), categoryFacade.getCategory(categoryId).getType());
 
         System.out.print("""
                 Введите тип операции:
@@ -193,6 +204,34 @@ public class UI {
         System.out.println("Новый баланс счёта: " + bankAccountFacade.getBankAccount(accountId).getBalance());
     }
 
+    public static void analitycs(AnalyticsFacade analyticsFacade, CategoryFacade categoryFacade, BankAccountFacade bankAccountFacade) {
+        System.out.println("1. Получить все доходы");
+        System.out.println("2. Получить все расходы");
+        System.out.println("3. Получить разницу по счёту за период");
+        System.out.println("4. Получить операции по категории");
+        System.out.println("0. Назад");
+        System.out.print("Выберите действие: ");
+        String action = scanner.nextLine();
+        switch (action) {
+            case "1" -> getIncomes(analyticsFacade);
+            case "2" -> getExpenses(analyticsFacade);
+            case "3" -> getAccountDifferenceForPeriod(analyticsFacade, bankAccountFacade);
+            case "4" -> groupOperationsByCategory(analyticsFacade, categoryFacade, bankAccountFacade);
+            case "0" -> System.out.println("Возврат в главное меню");
+            default -> System.out.println("Неверное действие");
+        }
+    }
+
+    public static void getIncomes(AnalyticsFacade analyticsFacade) {
+        Command command = new TimingDecorator(new GetIncomesCommand(analyticsFacade));
+        command.execute();
+    }
+
+    public static void getExpenses(AnalyticsFacade analyticsFacade) {
+        Command command = new TimingDecorator(new GetExpensesCommand(analyticsFacade));
+        command.execute();
+    }
+
     public static void getAccountDifferenceForPeriod(AnalyticsFacade analyticsFacade, BankAccountFacade bankAccountFacade) {
         System.out.print("Введите ID счёта: ");
         while (!scanner.hasNextLong()) {
@@ -206,14 +245,30 @@ public class UI {
             return;
         }
         System.out.print("Введите начальную дату (yyyy-MM-dd): ");
-        String startDate = scanner.nextLine();
+        String start = scanner.nextLine();
+        LocalDateTime startDate;
+        try {
+            startDate = LocalDateTime.parse(start + "T00:00");
+        } catch (Exception e) {
+            System.out.println("Неверный формат даты");
+            return;
+        }
+
         System.out.print("Введите конечную дату (yyyy-MM-dd): ");
-        String endDate = scanner.nextLine();
-        Command command = new TimingDecorator(new GetAccountDifferenceForPeriodCommand(analyticsFacade, accountId, LocalDateTime.parse(startDate), LocalDateTime.parse(endDate)));
+        String end = scanner.nextLine();
+        LocalDateTime endDate;
+        try {
+            endDate = LocalDateTime.parse(end + "T00:00");
+        } catch (Exception e) {
+            System.out.println("Неверный формат даты");
+            return;
+        }
+
+        Command command = new TimingDecorator(new GetAccountDifferenceForPeriodCommand(analyticsFacade, accountId, startDate, endDate));
         command.execute();
     }
 
-    public static void groupOperationsByCategory(AnalyticsFacade analyticsFacade, CategoryFacade categoryFacade) {
+    public static void groupOperationsByCategory(AnalyticsFacade analyticsFacade, CategoryFacade categoryFacade, BankAccountFacade bankAccountFacade) {
         System.out.print("Введите ID категории: ");
         while (!scanner.hasNextLong()) {
             System.out.println("Неверный формат ID категории");
@@ -225,7 +280,7 @@ public class UI {
             System.out.println("Категория с таким ID не найдена");
             return;
         }
-        Command command = new TimingDecorator(new GetOperationsByCategoryCommand(analyticsFacade, categoryId));
+        Command command = new TimingDecorator(new GetOperationsByCategoryCommand(analyticsFacade, categoryFacade, bankAccountFacade, categoryId));
         command.execute();
     }
 
@@ -251,7 +306,7 @@ public class UI {
         System.out.print("Введите новое название счёта: ");
         String name = scanner.nextLine();
 
-        System.out.print("Введите новый баланс счёта(Пример: 100.50): ");
+        System.out.print("Введите новый баланс счёта(Пример: 100): ");
         while (!scanner.hasNextDouble()) {
             System.out.println("Неверный формат баланса");
             scanner.nextLine();
@@ -343,12 +398,16 @@ public class UI {
         String date = scanner.nextLine();
         System.out.print("Введите новое время операции (HH:mm): ");
         String time = scanner.nextLine();
-        LocalDateTime dateTime = LocalDateTime.parse(date + "T" + time);
+        LocalDateTime dateTime;
+        try {
+            dateTime = LocalDateTime.parse(date + "T" + time);
+        } catch (Exception e) {
+            System.out.println("Неверный формат даты и времени");
+            return;
+        }
 
         System.out.print("Введите новое описание операции: ");
         String description = scanner.nextLine();
-
-        // TODO: Пересчитать баланс счёта после изменения операции
 
         Command command = new EditOperationCommand(operationFacade, operationId, type, amount, dateTime, description);
         command.execute();
@@ -370,7 +429,7 @@ public class UI {
         command.execute();
     }
 
-    public static void deleteCategory(CategoryFacade categoryFacade) {
+    public static void deleteCategory(CategoryFacade categoryFacade, OperationFacade operationFacade) {
         System.out.print("Введите ID категории: ");
         while (!scanner.hasNextLong()) {
             System.out.println("Неверный формат ID категории");
@@ -382,6 +441,15 @@ public class UI {
             System.out.println("Категория с таким ID не найдена");
             return;
         }
+
+        List<Operation> operations = operationFacade.getAllOperations();
+        for (Operation operation : operations) {
+            if (operation.getCategoryId().equals(categoryId)) {
+                System.out.println("Нельзя удалить категорию, так как она используется в операциях");
+                return;
+            }
+        }
+
         Command command = new DeleteCategoryCommand(categoryFacade, categoryId);
         command.execute();
     }

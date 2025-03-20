@@ -15,7 +15,6 @@ public class BankAccountFacade {
     private final BankAccountFactory factory;
     private final OperationFacade operationFacade;
 
-
     public BankAccountFacade(InMemoryRepository<BankAccount> repository, BankAccountFactory factory, OperationFacade operationFacade) {
         this.repository = repository;
         this.factory = factory;
@@ -46,6 +45,7 @@ public class BankAccountFacade {
     }
 
     public void deleteBankAccount(BankAccount bankAccount) {
+        operationFacade.deleteOperationsByBankAccount(bankAccount.getId());
         repository.delete(bankAccount);
     }
 
