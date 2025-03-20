@@ -31,13 +31,17 @@ public class BankAccountFacade {
         return repository.getById(id);
     }
 
-    public List<Pair<Long, BankAccount>> getAllBankAccounts() {
+    public boolean checkBankAccount(Long id) {
+        return repository.getById(id) != null;
+    }
+
+    public List<BankAccount> getAllBankAccounts() {
         return repository.getList();
     }
 
-    public void updateBankAccount(BankAccount bankAccount, String name,  double balance) {
+    public void updateBankAccount(BankAccount bankAccount, String name, double balance) {
         bankAccount.setName(name);
-        bankAccount.setBalance(balance);
+        bankAccount.setBalances(balance);
         repository.save(bankAccount);
     }
 
@@ -48,7 +52,7 @@ public class BankAccountFacade {
     public void recalculateBalance(Long accountId) {
         BankAccount account = repository.getById(accountId);
         if (account != null) {
-            double calculatedBalance = operationFacade.calculateBalanceForAccount(accountId);
+            double calculatedBalance = account.getStartBalance() + operationFacade.calculateBalanceForAccount(accountId);
             account.setBalance(calculatedBalance);
             repository.save(account);
         }

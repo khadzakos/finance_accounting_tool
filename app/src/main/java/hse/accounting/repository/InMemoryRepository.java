@@ -57,20 +57,15 @@ public class InMemoryRepository<T> {
         }
     }
 
-    public List<Pair<Long, T>> getList() {
-        List<Pair<Long, T>> list = new ArrayList<>();
+    public List<T> getList() {
+        List<T> list = new ArrayList<>();
         for (Map.Entry<Long, T> entry : items.entrySet()) {
-            list.add(new Pair<>(entry.getKey(), entry.getValue()));
+            list.add(entry.getValue());
         }
-        sort(list);
         return list;
     }
 
     public T getById(long id) {
-        if (items.containsKey(id)) {
-            return items.get(id);
-        } else {
-            throw new IllegalArgumentException("Item not found");
-        }
+        return items.get(id);
     }
 }

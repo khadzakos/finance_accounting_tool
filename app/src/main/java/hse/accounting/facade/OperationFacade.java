@@ -31,7 +31,11 @@ public class OperationFacade {
         return repository.getById(id);
     }
 
-    public List<Pair<Long, Operation>> getAllOperations() {
+    public boolean checkOperation(Long id) {
+        return repository.getById(id) != null;
+    }
+
+    public List<Operation> getAllOperations() {
         return repository.getList();
     }
 
@@ -49,7 +53,6 @@ public class OperationFacade {
 
     public double calculateBalanceForAccount(Long accountId) {
         List<Operation> operations = repository.getList().stream()
-                .map(Pair::getValue)
                 .filter(operation -> operation.getBankAccountId().equals(accountId))
                 .toList();
 

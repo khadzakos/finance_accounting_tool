@@ -28,7 +28,11 @@ public class CategoryFacade {
         return repository.getById(id);
     }
 
-    public List<Pair<Long, Category>> getAllCategories() {
+    public boolean checkCategory(Long id) {
+        return repository.getById(id) != null;
+    }
+
+    public List<Category> getAllCategories() {
         return repository.getList();
     }
 

@@ -1,6 +1,10 @@
 package hse.accounting.command;
 
+import hse.accounting.domain.Category;
 import hse.accounting.facade.CategoryFacade;
+import javafx.util.Pair;
+
+import java.util.List;
 
 public class ViewAllCategoriesCommand implements Command {
     private final CategoryFacade facade;
@@ -11,6 +15,14 @@ public class ViewAllCategoriesCommand implements Command {
 
     @Override
     public void execute() {
-        facade.getAllCategories().forEach(System.out::println);
+        List<Category> categories = facade.getAllCategories();
+        for (Category category : categories) {
+            System.out.printf("""
+                    --------------------------------
+                    ID: %d
+                    Название категории: %s
+                    Тип: %s
+                   """, category.getId(), category.getName(), category.getType() == Category.Type.INCOME ? "Доход" : "Расход");
+        }
     }
 }
