@@ -35,12 +35,8 @@ public class BankAccountFacade {
         return repository.getList();
     }
 
-    public void updateBankAccountName(BankAccount bankAccount, String name) {
+    public void updateBankAccount(BankAccount bankAccount, String name,  double balance) {
         bankAccount.setName(name);
-        repository.save(bankAccount);
-    }
-
-    public void updateBankAccountBalance(BankAccount bankAccount, double balance) {
         bankAccount.setBalance(balance);
         repository.save(bankAccount);
     }

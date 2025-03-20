@@ -19,10 +19,9 @@ public class CategoryFacade {
         this.factory = factory;
     }
 
-    public Category createCategory(String name, Category.Type type) {
+    public void createCategory(String name, Category.Type type) {
         Category category = factory.create(name, type);
         repository.save(category);
-        return category;
     }
 
     public Category getCategory(Long id) {
