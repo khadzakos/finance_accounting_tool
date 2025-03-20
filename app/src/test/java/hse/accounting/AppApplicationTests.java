@@ -16,8 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest(classes = ApplicationConfig.class)
 class AppApplicationTests {
 
@@ -208,7 +206,7 @@ class AppApplicationTests {
 //    void testDeleteOperation() {
 //        bankAccountFacade.createBankAccount("Test Account", 1000);
 //        categoryFacade.createCategory("Test Category", Category.Type.EXPENSE);
-//
+
 //        operationFacade.createOperation(
 //            Operation.Type.EXPENSE,
 //            0L,
@@ -217,12 +215,12 @@ class AppApplicationTests {
 //            "Test operation",
 //            1L
 //        );
-//
+
 //        DeleteOperationCommand command = new DeleteOperationCommand(operationFacade, 1L);
 //        command.execute();
-//
+
 //        assertTrue(operationFacade.getAllOperations().isEmpty());
-//
+
 //        BankAccount account = bankAccountFacade.getBankAccount(0L);
 //        assertNotNull(account, "Bank account should exist");
 //        assertEquals(900, account.getBalance(), "Balance should be updated after operation deletion");

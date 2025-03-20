@@ -20,6 +20,20 @@ Finance accounting tool | HW at FCS HSE Software Design Course
 - Аналитика операций по счетам
 - Работа с JSON, CSV, YAML файлами
 
+## Структура проекта
+- `src/main/java/hse/accounting/config` - пакет для реализации конфигурации Spring - DI.
+- `src/main/java/hse/accounting/command` - пакет для реализации команд и декоратора времени выполнения.
+- `src/main/java/hse/accounting/domain` - пакет для реализации доменных моделей.
+- `src/main/java/hse/accounting/facade` - пакет для реализации фасадов для доменных моделей, а таккже фасада аналитики.
+- `src/main/java/hse/accounting/factory` - пакет для реализации фабрик.
+- `src/main/java/hse/accounting/repository` - пакет для реализации in-memory базы данных.
+- `src/main/java/hse/accounting/idgenerator` - пакет для реализации синглтона и стратегии.
+- `src/main/java/hse/accounting/file/importer` - пакет для реализации импортера операций из файлов.
+- `src/main/java/hse/accounting/file/exporter` - пакет для реализации экспортера операций в файлы.
+- `src/main/java/hse/accounting/ui` - пакет для реализации консольного интерфейса.
+- `src/main/java/hse/accounting/main` - пакет для реализации косольного приложения.
+- `src/main/java/hse/accounting/AppApplication` - точка входа в приложение.
+
 ## Паттерны проектирования
 1. **Фабрика** - для создания объектов доменных моделей BankAccount, Category, Operation(см. `src/main/java/hse/accounting/factory`).
 2. **Синглтон + Стратегия** - для выдачи уникального ID объектам доменных моделей(см. `src/main/java/hse/accounting/idgenerator`).
