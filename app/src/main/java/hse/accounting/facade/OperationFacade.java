@@ -22,10 +22,9 @@ public class OperationFacade {
         this.factory = factory;
     }
 
-    public Operation createOperation(Operation.Type type, Long bankAccountId, double amount, LocalDateTime dateTime, String description, Long categoryId) {
+    public void createOperation(Operation.Type type, Long bankAccountId, double amount, LocalDateTime dateTime, String description, Long categoryId) {
         Operation operation = factory.create(type, bankAccountId, amount, dateTime, description, categoryId);
         repository.save(operation);
-        return operation;
     }
 
     public Operation getOperation(Long id) {
@@ -36,22 +35,10 @@ public class OperationFacade {
         return repository.getList();
     }
 
-    public void updateOperationType(Operation operation, Operation.Type type) {
+    public void updateOperation(Operation operation, Operation.Type type, double amount, LocalDateTime dateTime, String description) {
         operation.setType(type);
-        repository.save(operation);
-    }
-
-    public void updateOperationAmount(Operation operation, double amount) {
         operation.setAmount(amount);
-        repository.save(operation);
-    }
-
-    public void updateOperationDateTime(Operation operation, LocalDateTime dateTime) {
         operation.setDateTime(dateTime);
-        repository.save(operation);
-    }
-
-    public void updateOperationDescription(Operation operation, String description) {
         operation.setDescription(description);
         repository.save(operation);
     }
