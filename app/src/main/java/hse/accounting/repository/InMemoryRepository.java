@@ -7,11 +7,8 @@ import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import java.util.List;
 import java.util.Map;
-
-import static org.springframework.core.OrderComparator.sort;
 
 /**
  * Шаблонный репозиторий для хранения объектов в памяти
@@ -20,52 +17,38 @@ public class InMemoryRepository<T> {
     private final Map<Long, T> items = new HashMap<>();
 
     public void save(T item) {
-        switch (item.getClass().getSimpleName()) {
-            case "BankAccount":
-                BankAccount bankAccount = (BankAccount) item;
-                items.put(bankAccount.getId(), item);
-                break;
-            case "Category":
-                Category category = (Category) item;
-                items.put(category.getId(), item);
-                break;
-            case "Operation":
-                Operation operation = (Operation) item;
-                items.put(operation.getId(), item);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown type");
+        Long id;
+        if (item instanceof BankAccount) {
+            id = ((BankAccount) item).getId();
+        } else if (item instanceof Category) {
+            id = ((Category) item).getId();
+        } else if (item instanceof Operation) {
+            id = ((Operation) item).getId();
+        } else {
+            throw new IllegalArgumentException("Unknown type: " + item.getClass().getName());
         }
+        items.put(id, item);
     }
 
     public void delete(T item) {
-        switch (item.getClass().getSimpleName()) {
-            case "BankAccount":
-                BankAccount bankAccount = (BankAccount) item;
-                items.remove(bankAccount.getId());
-                break;
-            case "Category":
-                Category category = (Category) item;
-                items.remove(category.getId());
-                break;
-            case "Operation":
-                Operation operation = (Operation) item;
-                items.remove(operation.getId());
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown type");
+        Long id;
+        if (item instanceof BankAccount) {
+            id = ((BankAccount) item).getId();
+        } else if (item instanceof Category) {
+            id = ((Category) item).getId();
+        } else if (item instanceof Operation) {
+            id = ((Operation) item).getId();
+        } else {
+            throw new IllegalArgumentException("Unknown type: " + item.getClass().getName());
         }
+        items.remove(id);
+    }
+
+    public T getById(Long id) {
+        return items.get(id);
     }
 
     public List<T> getList() {
-        List<T> list = new ArrayList<>();
-        for (Map.Entry<Long, T> entry : items.entrySet()) {
-            list.add(entry.getValue());
-        }
-        return list;
-    }
-
-    public T getById(long id) {
-        return items.get(id);
+        return new ArrayList<>(items.values());
     }
 }

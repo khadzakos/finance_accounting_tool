@@ -14,6 +14,16 @@ public class EditOperationCommand implements Command {
     private final String description;
 
     public EditOperationCommand(OperationFacade facade, Long operationId, Operation.Type operationType, double amount, LocalDateTime date, String description) {
+        if (amount <= 0) {
+            throw new IllegalArgumentException("Amount must be positive");
+        }
+        if (date == null) {
+            throw new IllegalArgumentException("Date cannot be null");
+        }
+        if (description == null || description.trim().isEmpty()) {
+            throw new IllegalArgumentException("Description cannot be empty");
+        }
+
         this.facade = facade;
         this.operationId = operationId;
         this.operationType = operationType;
@@ -24,6 +34,10 @@ public class EditOperationCommand implements Command {
 
     @Override
     public void execute() {
-        facade.updateOperation(facade.getOperation(operationId), operationType, amount, date, description);
+        Operation operation = facade.getOperation(operationId);
+        if (operation == null) {
+            throw new IllegalArgumentException("Operation with id " + operationId + " not found");
+        }
+        facade.updateOperation(operation, operationType, amount, date, description);
     }
 }

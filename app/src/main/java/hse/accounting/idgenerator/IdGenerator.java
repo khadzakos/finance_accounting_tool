@@ -7,7 +7,7 @@ public class IdGenerator {
     private static final IdGenerator INSTANCE = new IdGenerator();
     private IIdGenerationStrategy strategy;
 
-    private IdGenerator() {
+    public IdGenerator() {
         this.strategy = new IncrementalIStrategy();
     }
 
