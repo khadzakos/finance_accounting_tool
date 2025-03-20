@@ -7,11 +7,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Примеры категорий: "Кафе" или "Здоровье" – для расходов. "Зарплата" или "Кэшбэк" – для доходов
  */
 public class Category {
-    @JsonProperty("categoryId")
+    @JsonProperty("id")
     private final Long id;
-    @JsonProperty("categoryType")
+    @JsonProperty("type")
     private final Type type;
-    @JsonProperty("categoryName")
+    @JsonProperty("name")
     private String name;
 
     public enum Type { INCOME, EXPENSE }

@@ -1,12 +1,22 @@
 package hse.accounting.main;
 
 import hse.accounting.config.ApplicationConfig;
+
+import hse.accounting.domain.BankAccount;
+import hse.accounting.domain.Category;
+import hse.accounting.domain.Operation;
+
 import hse.accounting.facade.AnalyticsFacade;
 import hse.accounting.facade.BankAccountFacade;
 import hse.accounting.facade.CategoryFacade;
 import hse.accounting.facade.OperationFacade;
+
+import hse.accounting.file.importer.Importer;
+import hse.accounting.file.exporter.ExporterVisitor;
+
 import hse.accounting.ui.UI;
 
+import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -14,17 +24,29 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 public class App {
     private static final Scanner scanner = new Scanner(System.in);
 
-    private static BankAccountFacade bankAccountFacade;
-    private static CategoryFacade categoryFacade;
-    private static OperationFacade operationFacade;
-    private static AnalyticsFacade analyticsFacade;
-
     public static void Run() {
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ApplicationConfig.class);
-        bankAccountFacade = context.getBean(BankAccountFacade.class);
-        categoryFacade = context.getBean(CategoryFacade.class);
-        operationFacade = context.getBean(OperationFacade.class);
-        analyticsFacade = context.getBean(AnalyticsFacade.class);
+        BankAccountFacade bankAccountFacade = context.getBean(BankAccountFacade.class);
+        CategoryFacade categoryFacade = context.getBean(CategoryFacade.class);
+        OperationFacade operationFacade = context.getBean(OperationFacade.class);
+        AnalyticsFacade analyticsFacade = context.getBean(AnalyticsFacade.class);
+        Importer<BankAccount> jsonBankAccountImporter = context.getBean("jsonBankAccountImporter", Importer.class);
+        Importer<Category> jsonCategoryImporter = context.getBean("jsonCategoryImporter", Importer.class);
+        Importer<Operation> jsonOperationImporter = context.getBean("jsonOperationImporter", Importer.class);
+        Importer<BankAccount> csvBankAccountImporter = context.getBean("csvBankAccountImporter", Importer.class);
+        Importer<Category> csvCategoryImporter = context.getBean("csvCategoryImporter", Importer.class);
+        Importer<Operation> csvOperationImporter = context.getBean("csvOperationImporter", Importer.class);
+        Importer<BankAccount> yamlBankAccountImporter = context.getBean("yamlBankAccountImporter", Importer.class);
+        Importer<Category> yamlCategoryImporter = context.getBean("yamlCategoryImporter", Importer.class);
+        Importer<Operation> yamlOperationImporter = context.getBean("yamlOperationImporter", Importer.class);
+        ExporterVisitor jsonVisitor = context.getBean("jsonVisitor", ExporterVisitor.class);
+        ExporterVisitor csvVisitor = context.getBean("csvVisitor", ExporterVisitor.class);
+        ExporterVisitor yamlVisitor = context.getBean("yamlVisitor", ExporterVisitor.class);
+
+        List<Importer<BankAccount>> accountImporters = List.of(jsonBankAccountImporter, csvBankAccountImporter, yamlBankAccountImporter);
+        List<Importer<Category>> categoryImporters = List.of(jsonCategoryImporter, csvCategoryImporter, yamlCategoryImporter);
+        List<Importer<Operation>> operationImporters = List.of(jsonOperationImporter, csvOperationImporter, yamlOperationImporter);
+        List<ExporterVisitor> exporters = List.of(jsonVisitor, csvVisitor, yamlVisitor);
 
         while (true) {
             UI.printMenu();
@@ -46,7 +68,8 @@ public class App {
                 case 12 -> UI.deleteAccount(bankAccountFacade);
                 case 13 -> UI.deleteCategory(categoryFacade, operationFacade);
                 case 14 -> UI.deleteOperation(operationFacade);
-//                case 15 -> UI.importExport();
+                case 15 -> UI.importFile(accountImporters, categoryImporters, operationImporters);
+                case 16 -> UI.exportFile(exporters);
                 case 0 -> {
                     context.close();
                     System.out.println("Выход...");

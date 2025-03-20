@@ -7,11 +7,10 @@ import java.time.LocalDateTime;
  * Operation - класс, описывающий операции над счетом.
 */
 public class Operation {
-    @JsonProperty("operationId")
     private final Long id;
-    @JsonProperty("operationType")
+    @JsonProperty("type")
     private Type type;
-    @JsonProperty("accountId")
+    @JsonProperty("bankAccountId")
     private Long bankAccountId;
     @JsonProperty("amount")
     private double amount;

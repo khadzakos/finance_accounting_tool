@@ -1,5 +1,8 @@
 package hse.accounting.command;
 
+/**
+ * Декоратор для измерения времени выполнения команды
+ */
 public class TimingDecorator implements Command {
     private final Command command;
 

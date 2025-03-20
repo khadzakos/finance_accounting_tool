@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * BankAccount - класс, описывающий банковский счет.
 */
 public class BankAccount {
-    @JsonProperty("accountId")
+    @JsonProperty("id")
     private final Long id;
-    @JsonProperty("accountName")
+    @JsonProperty("name")
     private String name;
     @JsonProperty("balance")
     private double balance;

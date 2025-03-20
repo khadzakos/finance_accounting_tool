@@ -28,11 +28,19 @@ import hse.accounting.command.RecalculateBalanceCommand;
 import hse.accounting.command.ViewAllAccountsCommand;
 import hse.accounting.command.ViewAllCategoriesCommand;
 import hse.accounting.command.ViewAllOperationsCommand;
+import hse.accounting.file.exporter.ExporterVisitor;
+import hse.accounting.file.importer.Importer;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
+
+/**
+ * Класс для работы с пользовательским интерфейсом
+ */
 public class UI {
     private static final Scanner scanner = new Scanner(System.in);
 
@@ -52,7 +60,8 @@ public class UI {
         System.out.println("12. Удалить счёт");
         System.out.println("13. Удалить категорию");
         System.out.println("14. Удалить операцию");
-        System.out.println("15. Импорт/Экспорт данных");
+        System.out.println("15. Импорт данных");
+        System.out.println("16. Экспорт данных");
         System.out.println("0. Выход");
         System.out.print("Выберите действие: ");
     }
@@ -470,5 +479,58 @@ public class UI {
         command.execute();
     }
 
-//    public static void importExport() {}
+    public static void importFile(List<Importer<BankAccount>> accountImporters, List<Importer<Category>> categoryImporters, List<Importer<Operation>> operationImporters) {
+        System.out.print("Введите путь к файлу: ");
+        String filePath = scanner.nextLine();
+        System.out.print("Выберите тип данных (1 - BankAccount, 2 - Category, 3 - Operation): ");
+        int type = scanner.nextInt();
+        System.out.print("Выберите формат (1 - JSON, 2 - CSV, 3 - YAML): ");
+        int format = scanner.nextInt();
+        scanner.nextLine();
+
+        try {
+            File file = new File(filePath);
+            if (type == 1) {
+                accountImporters.get(format - 1).importData(file);
+            } else if (type == 2) {
+                categoryImporters.get(format - 1).importData(file);
+            } else if (type == 3) {
+                operationImporters.get(format - 1).importData(file);
+            } else {
+                System.out.println("Неверный тип данных");
+            }
+        } catch (Exception e) {
+            System.out.println("Ошибка импорта: " + e.getMessage());
+        }
+
+    }
+    public static void exportFile(List<ExporterVisitor> exporters) {
+        System.out.print("Введите путь к файлу для экспорта: ");
+        String filePath = scanner.nextLine();
+        System.out.print("Выберите тип данных (1 - BankAccount, 2 - Category, 3 - Operation): ");
+        int type = scanner.nextInt();
+        System.out.print("Выберите формат (1 - JSON, 2 - CSV, 3 - YAML): ");
+        int format = scanner.nextInt();
+        System.out.print("Введите ID объекта: ");
+        Long id = scanner.nextLong();
+        scanner.nextLine();
+
+        try (FileWriter fileWriter = new FileWriter(filePath)) {
+            String data;
+            if (type == 1) {
+                data = exporters.get(format - 1).visit(new BankAccount(id, "", 0));
+            } else if (type == 2) {
+                data = exporters.get(format - 1).visit(new Category(id, Category.Type.INCOME, ""));
+            } else if (type == 3) {
+                data = exporters.get(format - 1).visit(new Operation(id, Operation.Type.INCOME, 0L, 0.0, LocalDateTime.now(), "", 0L));
+            } else {
+                System.out.println("Неверный тип данных");
+                return;
+            }
+            fileWriter.write(data);
+            System.out.println("Данные успешно экспортированы");
+        } catch (Exception e) {
+            System.out.println("Ошибка экспорта: " + e.getMessage());
+        }
+    }
 }
