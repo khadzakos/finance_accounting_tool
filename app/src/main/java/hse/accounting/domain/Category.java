@@ -8,13 +8,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class Category {
     @JsonProperty("id")
-    private final Long id;
+    private Long id;
     @JsonProperty("type")
-    private final Type type;
+    private Type type;
     @JsonProperty("name")
     private String name;
 
     public enum Type { INCOME, EXPENSE }
+
+    public Category() {}
 
     public Category(Long id, Type type, String name) {
         this.id = id;

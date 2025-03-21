@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
  * Operation - класс, описывающий операции над счетом.
 */
 public class Operation {
-    private final Long id;
+    private Long id;
     @JsonProperty("type")
     private Type type;
     @JsonProperty("bankAccountId")
@@ -23,6 +23,8 @@ public class Operation {
 
 
     public enum Type { INCOME, EXPENSE }
+
+    public Operation() {}
 
     public Operation(Long id, Type type, Long bankAccountId, double amount, LocalDateTime date, String description, Long categoryId) {
         this.id = id;

@@ -1,0 +1,20 @@
+- !!hse.accounting.domain.Operation
+  amount: 500.0
+  dateTime: {}
+  description: Monthly salary
+  type: INCOME
+- !!hse.accounting.domain.Operation
+  amount: 319.92
+  dateTime: {}
+  description: Cafe
+  type: EXPENSE
+- !!hse.accounting.domain.Operation
+  amount: 234.92
+  dateTime: {}
+  description: Cafe
+  type: EXPENSE
+- !!hse.accounting.domain.Operation
+  amount: 140.0
+  dateTime: {}
+  description: Monthly salary
+  type: INCOME

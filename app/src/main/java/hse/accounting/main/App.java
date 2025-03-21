@@ -69,7 +69,7 @@ public class App {
                 case 13 -> UI.deleteCategory(categoryFacade, operationFacade);
                 case 14 -> UI.deleteOperation(operationFacade);
                 case 15 -> UI.importFile(accountImporters, categoryImporters, operationImporters);
-                case 16 -> UI.exportFile(exporters);
+                case 16 -> UI.exportFile(exporters, bankAccountFacade, categoryFacade, operationFacade);
                 case 0 -> {
                     context.close();
                     System.out.println("Выход...");

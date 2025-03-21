@@ -504,25 +504,23 @@ public class UI {
         }
 
     }
-    public static void exportFile(List<ExporterVisitor> exporters) {
+    public static void exportFile(List<ExporterVisitor> exporters, BankAccountFacade bankAccountFacade, CategoryFacade categoryFacade, OperationFacade operationFacade) {
         System.out.print("Введите путь к файлу для экспорта: ");
         String filePath = scanner.nextLine();
         System.out.print("Выберите тип данных (1 - BankAccount, 2 - Category, 3 - Operation): ");
         int type = scanner.nextInt();
         System.out.print("Выберите формат (1 - JSON, 2 - CSV, 3 - YAML): ");
         int format = scanner.nextInt();
-        System.out.print("Введите ID объекта: ");
-        Long id = scanner.nextLong();
         scanner.nextLine();
 
         try (FileWriter fileWriter = new FileWriter(filePath)) {
             String data;
             if (type == 1) {
-                data = exporters.get(format - 1).visit(new BankAccount(id, "", 0));
+                data = exporters.get(format - 1).visitBankAccounts(bankAccountFacade.getAllBankAccounts());
             } else if (type == 2) {
-                data = exporters.get(format - 1).visit(new Category(id, Category.Type.INCOME, ""));
+                data = exporters.get(format - 1).visitCategories(categoryFacade.getAllCategories());
             } else if (type == 3) {
-                data = exporters.get(format - 1).visit(new Operation(id, Operation.Type.INCOME, 0L, 0.0, LocalDateTime.now(), "", 0L));
+                data = exporters.get(format - 1).visitOperations(operationFacade.getAllOperations());
             } else {
                 System.out.println("Неверный тип данных");
                 return;

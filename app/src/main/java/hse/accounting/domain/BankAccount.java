@@ -7,12 +7,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 */
 public class BankAccount {
     @JsonProperty("id")
-    private final Long id;
+    private Long id;
     @JsonProperty("name")
     private String name;
     @JsonProperty("balance")
     private double balance;
     private double currentBalance;
+
+    public BankAccount() {}
 
     public BankAccount(Long id, String name, double balance) {
         this.id = id;

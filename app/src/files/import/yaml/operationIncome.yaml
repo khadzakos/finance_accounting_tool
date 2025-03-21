@@ -1,7 +1,0 @@
-id: 3
-type: INCOME
-bankAccountId: 0
-amount: 500.0
-date: "2023-10-17T14:30:00"
-description: "Monthly salary"
-categoryId: 1

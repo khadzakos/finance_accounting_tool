@@ -6,6 +6,7 @@ import hse.accounting.facade.OperationFacade;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.List;
 
 public abstract class AbstractImporter<T> implements Importer<T> {
     protected final BankAccountFacade accountFacade;
@@ -21,7 +22,7 @@ public abstract class AbstractImporter<T> implements Importer<T> {
     @Override
     public void importData(File file) throws Exception {
         String content = readFile(file);
-        T entity = parseData(content);
+        List<T> entity = parseData(content);
         saveEntity(entity);
     }
 
@@ -29,7 +30,7 @@ public abstract class AbstractImporter<T> implements Importer<T> {
         return new String(Files.readAllBytes(file.toPath()));
     }
 
-    protected abstract T parseData(String content) throws Exception;
+    protected abstract List<T> parseData(String content) throws Exception;
 
-    protected abstract void saveEntity(T entity);
+    protected abstract void saveEntity(List<T> entities);
 }

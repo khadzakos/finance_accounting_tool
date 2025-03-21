@@ -4,8 +4,10 @@ import hse.accounting.domain.BankAccount;
 import hse.accounting.domain.Category;
 import hse.accounting.domain.Operation;
 
+import java.util.List;
+
 public interface ExporterVisitor {
-    String visit(BankAccount account);
-    String visit(Category category);
-    String visit(Operation operation);
+    String visitBankAccounts(List<BankAccount> accounts);
+    String visitCategories(List<Category> categories);
+    String visitOperations(List<Operation> operations);
 }

@@ -1,0 +1,2 @@
+- !!hse.accounting.domain.Category {name: Salary}
+- !!hse.accounting.domain.Category {name: Cafe}

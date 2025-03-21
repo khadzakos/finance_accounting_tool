@@ -1,0 +1,6 @@
+- id: 1
+  type: INCOME
+  name: Salary
+- id: 2
+  type: EXPENSE
+  name: Cafe

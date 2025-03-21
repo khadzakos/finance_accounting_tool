@@ -1,0 +1,28 @@
+- id: 1
+  type: INCOME
+  bankAccountId: 0
+  amount: 500.0
+  date: "2023-10-17T14:30:00"
+  description: "Monthly salary"
+  categoryId: 2
+- id: 2
+  type: EXPENSE
+  bankAccountId: 0
+  amount: 319.92
+  date: "2023-10-17T14:30:00"
+  description: "Cafe"
+  categoryId: 3
+- id: 3
+  type: EXPENSE
+  bankAccountId: 1
+  amount: 234.92
+  date: "2023-10-17T14:30:00"
+  description: "Cafe"
+  categoryId: 3
+- id: 4
+  type: INCOME
+  bankAccountId: 1
+  amount: 140.0
+  date: "2023-10-17T14:30:00"
+  description: "Monthly salary"
+  categoryId: 2

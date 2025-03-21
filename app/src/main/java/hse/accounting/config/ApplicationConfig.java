@@ -71,6 +71,11 @@ public class ApplicationConfig {
     }
 
     @Bean
+    public Importer<Operation> yamlOperationImporter(BankAccountFacade bankAccountFacade, CategoryFacade categoryFacade, OperationFacade operationFacade) {
+        return new YAMLImporter<>(Operation.class, bankAccountFacade, categoryFacade, operationFacade);
+    }
+
+    @Bean
     public ExporterVisitor jsonVisitor() {
         return new JSONVisitor();
     }
@@ -83,11 +88,6 @@ public class ApplicationConfig {
     @Bean
     public ExporterVisitor yamlVisitor() {
         return new YAMLVisitor();
-    }
-
-    @Bean
-    public Importer<Operation> yamlOperationImporter(BankAccountFacade bankAccountFacade, CategoryFacade categoryFacade, OperationFacade operationFacade) {
-        return new YAMLImporter<>(Operation.class, bankAccountFacade, categoryFacade, operationFacade);
     }
 
     @Bean
